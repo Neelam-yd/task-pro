@@ -23,7 +23,7 @@ export default function SignUpPage() {
 
   const roles = [
      'member',
-    'Admin',
+    'admin',
     
   ];
 
