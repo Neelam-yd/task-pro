@@ -12,33 +12,33 @@ import Sidebar from '@/components/Sidebar';
 /* ── STATUS CONFIG ─────────────────────────────── */
 // Covers all values your backend may return: "active", "completed", "in-progress", "pending"
 const statusConfig = {
-  'active':      { cls: 'bg-blue-50 text-blue-700 border border-blue-200',         dot: 'bg-blue-500' },
-  'in-progress': { cls: 'bg-blue-50 text-blue-700 border border-blue-200',         dot: 'bg-blue-500' },
-  'completed':   { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' },
-  'done':        { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' },
-  'pending':     { cls: 'bg-gray-100 text-gray-600 border border-gray-200',         dot: 'bg-gray-400' },
-  'in-review':   { cls: 'bg-amber-50 text-amber-700 border border-amber-200',       dot: 'bg-amber-500' },
+  'active': { cls: 'bg-blue-50 text-blue-700 border border-blue-200', dot: 'bg-blue-500' },
+  'in-progress': { cls: 'bg-blue-50 text-blue-700 border border-blue-200', dot: 'bg-blue-500' },
+  'completed': { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' },
+  'done': { cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' },
+  'pending': { cls: 'bg-gray-100 text-gray-600 border border-gray-200', dot: 'bg-gray-400' },
+  'in-review': { cls: 'bg-amber-50 text-amber-700 border border-amber-200', dot: 'bg-amber-500' },
 };
 
 const STATUS_LABELS = {
-  'active':      'Active',
+  'active': 'Active',
   'in-progress': 'In Progress',
-  'completed':   'Done',
-  'done':        'Done',
-  'pending':     'To Do',
-  'in-review':   'In Review',
+  'completed': 'Done',
+  'done': 'Done',
+  'pending': 'To Do',
+  'in-review': 'In Review',
 };
 
 /* ── PALETTE for project accent colors ─────────── */
 const PALETTES = [
-  { bg: 'bg-blue-600',    light: 'bg-blue-50',   bar: 'bg-blue-500',    text: 'text-blue-700' },
-  { bg: 'bg-violet-600',  light: 'bg-violet-50',  bar: 'bg-violet-500',  text: 'text-violet-700' },
+  { bg: 'bg-blue-600', light: 'bg-blue-50', bar: 'bg-blue-500', text: 'text-blue-700' },
+  { bg: 'bg-violet-600', light: 'bg-violet-50', bar: 'bg-violet-500', text: 'text-violet-700' },
   { bg: 'bg-emerald-600', light: 'bg-emerald-50', bar: 'bg-emerald-500', text: 'text-emerald-700' },
-  { bg: 'bg-rose-600',    light: 'bg-rose-50',    bar: 'bg-rose-500',    text: 'text-rose-700' },
-  { bg: 'bg-amber-600',   light: 'bg-amber-50',   bar: 'bg-amber-500',   text: 'text-amber-700' },
-  { bg: 'bg-cyan-600',    light: 'bg-cyan-50',    bar: 'bg-cyan-500',    text: 'text-cyan-700' },
-  { bg: 'bg-indigo-600',  light: 'bg-indigo-50',  bar: 'bg-indigo-500',  text: 'text-indigo-700' },
-  { bg: 'bg-pink-600',    light: 'bg-pink-50',    bar: 'bg-pink-500',    text: 'text-pink-700' },
+  { bg: 'bg-rose-600', light: 'bg-rose-50', bar: 'bg-rose-500', text: 'text-rose-700' },
+  { bg: 'bg-amber-600', light: 'bg-amber-50', bar: 'bg-amber-500', text: 'text-amber-700' },
+  { bg: 'bg-cyan-600', light: 'bg-cyan-50', bar: 'bg-cyan-500', text: 'text-cyan-700' },
+  { bg: 'bg-indigo-600', light: 'bg-indigo-50', bar: 'bg-indigo-500', text: 'text-indigo-700' },
+  { bg: 'bg-pink-600', light: 'bg-pink-50', bar: 'bg-pink-500', text: 'text-pink-700' },
 ];
 
 function getPalette(index) {
@@ -55,7 +55,7 @@ function formatDate(d) {
 }
 
 /* ── AVATAR ────────────────────────────────────── */
-const avatarBgs = ['bg-blue-500','bg-violet-500','bg-emerald-500','bg-rose-500','bg-amber-500','bg-cyan-500'];
+const avatarBgs = ['bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-rose-500', 'bg-amber-500', 'bg-cyan-500'];
 function MemberAvatar({ name, index }) {
   const initials = typeof name === 'string' && name.length <= 3 ? name : getInitials(name);
   return (
@@ -235,7 +235,7 @@ function NewProjectModal({ onClose, onCreated }) {
     setError('');
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/projects', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: token },
         body: JSON.stringify(form),
@@ -338,20 +338,21 @@ function NewProjectModal({ onClose, onCreated }) {
    MAIN PAGE
    ══════════════════════════════════════════════════ */
 export default function ProjectsPage() {
-  const [projects, setProjects]   = useState([]);
-  const [view, setView]           = useState('grid');
-  const [search, setSearch]       = useState('');
-  const [filter, setFilter]       = useState('all');
-  const [loading, setLoading]     = useState(true);
-  const [starred, setStarred]     = useState({});
+  const [projects, setProjects] = useState([]);
+  const [view, setView] = useState('grid');
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [starred, setStarred] = useState({});
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => { fetchProjects(); }, []);
+
+
 
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/projects', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`, {
         headers: { Authorization: token },
       });
       const data = await res.json();
@@ -366,7 +367,7 @@ export default function ProjectsPage() {
       setLoading(false);
     }
   };
-
+useEffect(() => { fetchProjects(); }, []);
   const toggleStar = (id) => setStarred(prev => ({ ...prev, [id]: !prev[id] }));
 
   const handleCreated = (newProject) => {
@@ -393,23 +394,23 @@ export default function ProjectsPage() {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const s = (p.status || '').toLowerCase();
     const matchFilter =
-      filter === 'all'         ? true :
-      filter === 'starred'     ? p.starred :
-      filter === 'active'      ? ['active','in-progress'].includes(s) :
-      filter === 'completed'   ? ['completed','done'].includes(s) :
-      filter === 'pending'     ? s === 'pending' :
-      s === filter;
+      filter === 'all' ? true :
+        filter === 'starred' ? p.starred :
+          filter === 'active' ? ['active', 'in-progress'].includes(s) :
+            filter === 'completed' ? ['completed', 'done'].includes(s) :
+              filter === 'pending' ? s === 'pending' :
+                s === filter;
     return matchSearch && matchFilter;
   });
 
-  const starredProjects  = filtered.filter(p => p.starred);
-  const regularProjects  = filtered.filter(p => !p.starred);
+  const starredProjects = filtered.filter(p => p.starred);
+  const regularProjects = filtered.filter(p => !p.starred);
 
   /* stats */
-  const total      = projects.length;
-  const done       = projects.filter(p => ['completed','done'].includes((p.status||'').toLowerCase())).length;
-  const inProgress = projects.filter(p => ['in-progress','active'].includes((p.status||'').toLowerCase())).length;
-  const overdue    = projects.filter(p => p.dueDate && new Date(p.dueDate) < new Date() && !['completed','done'].includes((p.status||'').toLowerCase())).length;
+  const total = projects.length;
+  const done = projects.filter(p => ['completed', 'done'].includes((p.status || '').toLowerCase())).length;
+  const inProgress = projects.filter(p => ['in-progress', 'active'].includes((p.status || '').toLowerCase())).length;
+  const overdue = projects.filter(p => p.dueDate && new Date(p.dueDate) < new Date() && !['completed', 'done'].includes((p.status || '').toLowerCase())).length;
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
@@ -467,29 +468,28 @@ export default function ProjectsPage() {
 
           {/* ── STATS ROW ── */}
           <div className="flex gap-4">
-            <StatPill icon={Folder}       value={total}      label="Total Projects"  color="bg-blue-50 text-blue-700" />
-            <StatPill icon={CheckCircle2} value={done}       label="Completed"       color="bg-emerald-50 text-emerald-700" />
-            <StatPill icon={TrendingUp}   value={inProgress} label="In Progress"     color="bg-amber-50 text-amber-700" />
-            <StatPill icon={AlertCircle}  value={overdue}    label="Overdue"         color="bg-red-50 text-red-700" />
+            <StatPill icon={Folder} value={total} label="Total Projects" color="bg-blue-50 text-blue-700" />
+            <StatPill icon={CheckCircle2} value={done} label="Completed" color="bg-emerald-50 text-emerald-700" />
+            <StatPill icon={TrendingUp} value={inProgress} label="In Progress" color="bg-amber-50 text-amber-700" />
+            <StatPill icon={AlertCircle} value={overdue} label="Overdue" color="bg-red-50 text-red-700" />
           </div>
 
           {/* ── FILTER TABS ── */}
           <div className="flex items-center gap-2">
             {[
-              { key: 'all',       label: 'All' },
-              { key: 'starred',   label: '⭐ Starred' },
-              { key: 'active',    label: 'Active' },
-              { key: 'pending',   label: 'To Do' },
+              { key: 'all', label: 'All' },
+              { key: 'starred', label: '⭐ Starred' },
+              { key: 'active', label: 'Active' },
+              { key: 'pending', label: 'To Do' },
               { key: 'completed', label: 'Completed' },
             ].map(tab => (
               <button
                 key={tab.key}
                 onClick={() => setFilter(tab.key)}
-                className={`px-3.5 py-1.5 rounded-xl text-sm font-medium transition ${
-                  filter === tab.key
+                className={`px-3.5 py-1.5 rounded-xl text-sm font-medium transition ${filter === tab.key
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-600'
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>

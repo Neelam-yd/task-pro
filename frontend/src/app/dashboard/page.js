@@ -80,7 +80,7 @@ export default function DashboardPage() {
         if (!token) { window.location.href = "/login"; return; }
         setUser(storedUser);
 
-        const res = await fetch("http://localhost:5000/api/dashboard", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/dashboard`, {
           headers: { Authorization: token },
         });
         if (!res.ok) { window.location.href = "/login"; return; }

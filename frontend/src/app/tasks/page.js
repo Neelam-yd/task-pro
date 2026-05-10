@@ -94,7 +94,7 @@ function AddTaskModal({ open, onClose, onAdd }) {
     setSaving(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: token },
         body: JSON.stringify({
@@ -224,7 +224,7 @@ export default function TasksPage() {
     (async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/tasks", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tasks`, {
           headers: { Authorization: token },
         });
         const data = await res.json();
