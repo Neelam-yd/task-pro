@@ -22,12 +22,9 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
 
   const roles = [
-    'Developer',
-    'Designer',
-    'Project Manager',
-    'QA Engineer',
+     'member',
     'Admin',
-    'Other'
+    
   ];
 
   // 🔥 SIGNUP FUNCTION

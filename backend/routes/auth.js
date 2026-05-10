@@ -7,43 +7,37 @@ const router = express.Router();
 
 /* ================= SIGNUP ================= */
 router.post("/signup", async (req, res) => {
-  console.log("🔥 SIGNUP API HIT");
-console.log("JWT SECRET (LOGIN):", process.env.JWT_SECRET);
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
-    // validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    // check existing user
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // only allow admin or member roles
+    const allowedRole = role === "admin" ? "admin" : "member";
 
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
+      role: allowedRole
     });
 
     await newUser.save();
 
-    return res.status(201).json({
-      message: "Signup successful",
-    });
+    return res.status(201).json({ message: "Signup successful" });
 
   } catch (error) {
     console.log("SIGNUP ERROR:", error);
-    return res.status(500).json({
-      message: "Server error in signup",
-    });
+    return res.status(500).json({ message: "Server error in signup" });
   }
 });
 
@@ -52,26 +46,22 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // generate JWT token (FIXED: no hardcoded secret)
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, role: user.role },  // ✅ role added to token
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    // safe response (NO password leak)
     res.json({
       message: "Login successful",
       token,
@@ -79,6 +69,7 @@ router.post("/login", async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role  // ✅ role sent to frontend
       },
     });
 
